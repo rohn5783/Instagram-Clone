@@ -1,7 +1,7 @@
-
 import User from "../model/user.model.js";
-import crypto from "crypto";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { pass } from "three/tsl";
 
 async function registerController(req, res) {
   const { userName, email, password, bio, profile_Img } = req.body;
@@ -19,7 +19,7 @@ async function registerController(req, res) {
           : "Username already exists"),
     });
   }
-  const hash = crypto.createHash("sha256").update(password).digest("hex");
+  const hash = await bcrypt.hash(password, 10);
   const user = await User.create({
     userName,
     email,
@@ -51,7 +51,7 @@ async function registerController(req, res) {
   });
 }
 
-async function loginController (req, res)  {
+async function loginController(req, res) {
   const user = await User.findOne({
     $or: [
       {
@@ -67,11 +67,11 @@ async function loginController (req, res)  {
       message: "User not found",
     });
   }
-  const hash = crypto
-    .createHash("sha256")
-    .update(req.body.password)
-    .digest("hex");
-  const isPasswordCorrect = (await user.password) === hash;
+  const isPasswordCorrect = await bcrypt.compare(
+    req.body.password,
+    user.password,
+  );
+
   if (!isPasswordCorrect) {
     return res.status(401).json({
       message: "Invalid password",
@@ -92,6 +92,5 @@ async function loginController (req, res)  {
     },
   });
 }
-
 
 export default { registerController, loginController };
