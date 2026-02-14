@@ -1,7 +1,6 @@
 import User from "../model/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { pass } from "three/tsl";
 
 async function registerController(req, res) {
   const { userName, email, password, bio, profile_Img } = req.body;
