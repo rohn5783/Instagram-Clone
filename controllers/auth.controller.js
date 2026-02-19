@@ -49,7 +49,7 @@ async function registerController(req, res) {
     },
   });
 }
-
+//  login controller
 async function loginController(req, res) {
   const user = await User.findOne({
     $or: [
