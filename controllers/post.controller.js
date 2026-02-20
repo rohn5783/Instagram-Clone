@@ -7,30 +7,59 @@ const imagekit = new ImageKit({
 });
 
 async function createPostController(req, res) {
-  console.log(req.body, req.file);
-
-  const token = req.cookies.token;
-  if (!token) {
-    res.status(401).send("Unauthorized");
-  }
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
+
+  // const token = req.cookies.token;
+  // if (!token) {
+  //   res.status(401).send("Unauthorized user");
+  // }
+  // let decoded;
+  // try {
+  //   decoded = jwt.verify(token, process.env.JWT_SECRET);
+  // } catch (err) {
+  //   res.status(401).json({
+  //     message: "Unauthorized user",
+  //   });
+  // }
 
   const file = await imagekit.files.upload({
     file: await toFile(Buffer.from(req.file.buffer, "file")),
     fileName: "image",
-    folder: "Instagram-Clone"
-  })
-  
-  const post  = await Post.create({
+    folder: "Instagram-Clone",
+  });
+
+  const post = await Post.create({
     caption: req.body.caption,
     imgUrl: file.url,
-    user: decoded.id
-  })
+    user: req.user.id,
+  });
   res.status(201).json({
     message: "Post created successfully",
-    post
+    post,
   });
 }
 
-export default { createPostController };
+//  get all posts
+
+async function getPostController(req, res) {
+  // const token = req.cookies.token;
+  // if (!token) {
+  //   res.status(401).send("Unauthorized user");
+  // }
+  // let decoded;
+  // try {
+  //   decoded = jwt.verify(token, process.env.JWT_SECRET);
+  // } catch (err) {
+  //   res.status(401).json({
+  //     message: "Unauthorized user",
+  //   });
+  // }
+
+  const allPost = await Post.find({ user: req.user.id });
+  res.status(200).json({
+    message: "Posts fetched successfully",
+    allPost,
+  });
+}
+
+export default { createPostController, getPostController };

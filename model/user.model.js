@@ -20,7 +20,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "https://ik.imagekit.io/a4uu1ujnt/icons8-user-default-64.png",
   },
-  followers: Array,
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+  }],
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+  }],
 });
 
 const User = mongoose.model("Users", userSchema);
