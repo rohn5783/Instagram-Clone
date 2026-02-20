@@ -2,6 +2,7 @@ import Post from "../model/post.model.js";
 import ImageKit from "@imagekit/nodejs";
 import { toFile } from "@imagekit/nodejs";
 import jwt from "jsonwebtoken";
+import LikeModel from "../model/like.model.js";
 const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
@@ -61,5 +62,36 @@ async function getPostController(req, res) {
     allPost,
   });
 }
+//  post like feature
+async function likePostController(req, res) {
+  const userName = req.user.userName;
+  const postId = req.params.postId;
+  const post = await Post.findById(postId);
+  if (!post) {
+    res.status(404).json({
+      message: "Post not found",
+    });
+  }
+const isLiked = await LikeModel.findOne({
+    post: postId,
+    user: userName,
+  });
+if(isLiked){
+return res.status(409).json({
+    message: "You have already liked this post",
+  });
+}
 
-export default { createPostController, getPostController };
+const like = await LikeModel.create({
+    post: postId,
+    user: userName,
+  });
+  res.status(200).json({
+    message: "post  Liked successfully",
+    like,
+  });
+}
+
+
+
+export default { createPostController, getPostController, likePostController };

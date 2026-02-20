@@ -7,6 +7,7 @@ const userRouter = express.Router();
 
 
 userRouter.post("/follow/:userName",identifyUser, userController.followController);
+userRouter.delete("/unfollow/:userName",identifyUser, userController.unfollowController);
 
 
 

@@ -9,11 +9,20 @@ const followSchema = new mongoose.Schema({
   followee: {
     type: String,
    
-  }
+  },
+  ststus:{
+    type: String,
+    default: "pending",
+    enum: {values: ["pending", "approved", "rejected"]},
+    message: "status can only be pending, approved or rejected"
 
-},{
+    }
+  },
+
+{
 timestamps: true
 });
+followSchema.index({ follower: 1, followee: 1 }, { unique: true });
 
 const followModel = mongoose.model("follows", followSchema);
 
