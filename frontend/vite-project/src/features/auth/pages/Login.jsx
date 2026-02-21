@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "../styles/form.scss";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const { handleLogin } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -18,18 +20,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        formData,
-      );
-      console.log(response.data);
-      localStorage.setItem("token", response.data.token);
-      alert("Login Successful");
-    } catch (error) {
-      console.log(error.response.data);
-      alert("Login Failed");
-    }
+    const { username, password } = formData;
+    handleLogin(username, password).then(res=> {
+      console.log(res);
+    })
   };
 
   return (
@@ -39,7 +33,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="login__form">
           <input
-            type="email"
+            type="name"
             name="email"
             placeholder="Enter Email"
             value={formData.email}

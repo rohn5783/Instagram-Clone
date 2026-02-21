@@ -22,14 +22,15 @@ const Register = () => {
   
 
     e.preventDefault();
-    axios
-      .post("http://localhost:3000/api/auth/register", formData)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+    // axios
+    //   .post("http://localhost:3000/api/auth/register", formData,{withCredentials:true})
+      
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
 
     
 

@@ -43,11 +43,9 @@ export async function registerController(req, res) {
 
     // Generate token
     const token = jwt.sign(
-      { id: user._id,
-        username: user.username,
-       },
+      { id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.cookie("token", token, {
@@ -66,7 +64,6 @@ export async function registerController(req, res) {
       },
       token,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -83,13 +80,13 @@ export async function loginController(req, res) {
   try {
     const { email, username, password } = req.body;
 
-   let user;
+    let user;
 
-if (email) {
-  user = await User.findOne({ email });
-} else if (username) {
-  user = await User.findOne({ username });
-}
+    if (email) {
+      user = await User.findOne({ email });
+    } else if (username) {
+      user = await User.findOne({ username });
+    }
 
     if (!user) {
       return res.status(404).json({
@@ -97,10 +94,7 @@ if (email) {
       });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(401).json({
@@ -109,11 +103,9 @@ if (email) {
     }
 
     const token = jwt.sign(
-      { id: user._id,
-        username: user.username,
-       },
+      { id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1h" },
     );
 
     res.cookie("token", token, {
@@ -132,7 +124,6 @@ if (email) {
       },
       token,
     });
-
   } catch (error) {
     return res.status(500).json({
       message: "Server error",
@@ -141,4 +132,20 @@ if (email) {
   }
 }
 
-export default { registerController, loginController };
+//  get me controller
+export async function getMeController(req, res) {
+  const useId = req.user.id;
+  const user = await User.findById(useId);
+  res.status(200).json({
+    message: "User fetched successfully",
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      bio: user.bio,
+      profile_Img: user.profile_Img,
+    },
+  });
+}
+
+export default { registerController, loginController, getMeController };
