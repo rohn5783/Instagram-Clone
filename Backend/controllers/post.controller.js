@@ -1,8 +1,10 @@
 import Post from "../model/post.model.js";
+import User from "../model/user.model.js";
 import ImageKit from "@imagekit/nodejs";
 import { toFile } from "@imagekit/nodejs";
 import jwt from "jsonwebtoken";
 import LikeModel from "../model/like.model.js";
+// import User from "../model/user.model.js";
 const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
@@ -90,4 +92,13 @@ async function likePostController(req, res) {
   });
 }
 
-export default { createPostController, getPostController, likePostController };
+async function getFeedController(req, res){
+  const posts = await Post.find().populate("user");
+
+  res.status(200).json({
+    message: "Posts fetched successfully",
+    posts,
+  });
+}
+
+export default { createPostController, getPostController, likePostController, getFeedController };

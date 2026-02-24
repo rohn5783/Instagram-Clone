@@ -16,6 +16,8 @@ postRouter.get("/",identifyUser, postController.getPostController);
 postRouter.post("/like/:postId", identifyUser, postController.likePostController);
 
 
+postRouter.get("/:postId", identifyUser, postController.getFeedController);
+
 
 
 export default postRouter;

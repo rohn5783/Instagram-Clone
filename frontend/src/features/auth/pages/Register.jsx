@@ -3,7 +3,7 @@ import "../style/form.scss";
 import { Link } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 const Register = () => {
-  const {user, loading, handleRegister} = useAuth();
+  const { user, loading, handleRegister } = useAuth();
   const [username, setusername] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -11,8 +11,6 @@ const Register = () => {
     e.preventDefault();
     await handleRegister(username, email, password);
     console.log(user);
-  
-    
   };
   if (loading) {
     return <main>Loading...</main>;
@@ -24,21 +22,27 @@ const Register = () => {
         <h1> Register</h1>
         <form onSubmit={handleSubmit} className="form-container">
           <input
-            onInput={(e)=> {setusername(e.target.value)}}
+            onInput={(e) => {
+              setusername(e.target.value);
+            }}
             type="text"
             placeholder="Enter username"
             id="username"
             name="username"
           />
           <input
-            onInput={(e)=> {setemail(e.target.value)}}
+            onInput={(e) => {
+              setemail(e.target.value);
+            }}
             type="text"
             placeholder="Enter email"
             id="email"
             name="email"
           />
           <input
-            onInput={(e)=> {setpassword(e.target.value)}}
+            onInput={(e) => {
+              setpassword(e.target.value);
+            }}
             type="password"
             placeholder="Enter password"
             id="password"

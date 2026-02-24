@@ -22,13 +22,13 @@ const userSchema = new mongoose.Schema({
   },
   followers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "User",
   }],
   following: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "User",
   }],
 });
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
